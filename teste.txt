@@ -1,0 +1,27 @@
+import * as tf from '@tensorflow/tfjs-node';
+import * as tflite from '@tensorflow/tfjs-tflite';
+import * as fs from 'fs';
+
+(async () => {
+    try {
+        // Caminho para o arquivo .tflite
+        const tfliteModelPath = 'path/to/model.tflite';
+
+        // Ler o modelo .tflite como um buffer
+        const modelBuffer = fs.readFileSync(tfliteModelPath);
+
+        // Carregar o modelo TensorFlow Lite
+        const model = await tflite.loadTFLiteModel(modelBuffer);
+
+        // Criar um tensor de entrada
+        const inputTensor = tf.tensor1d([1.0, 2.0, 3.0, 4.0]); // Ajuste conforme necessário
+
+        // Fazer previsões
+        const prediction = model.predict(inputTensor) as tf.Tensor;
+
+        // Exibir o resultado
+        prediction.print();
+    } catch (error) {
+        console.error('Erro ao carregar ou usar o modelo:', error);
+    }
+})();
